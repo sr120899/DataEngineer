@@ -24,6 +24,10 @@ GEE_PROJECT_ID = "tidy-nomad-470808-e1"
 COUNTRY_FILTER = "TH"
 OUTPUT_HTML = "openaq_thailand_map.html"
 
+# [[south, west], [north, east]] - covers Thailand's full extent so the initial
+# view is consistent even if the current data doesn't reach every corner of the country.
+THAILAND_BOUNDS = [[5.6, 97.3], [20.5, 105.7]]
+
 # Latest reading per station per pollutant, restricted to Thailand, to keep the
 # result set (and therefore the map) small even though the source table holds
 # many millions of rows worldwide.
@@ -91,9 +95,8 @@ def build_popup_html(station: str, city: str, readings: pd.DataFrame) -> str:
 
 
 def build_map(df: pd.DataFrame) -> folium.Map:
-    center_lat = df["latitude"].mean()
-    center_lon = df["longitude"].mean()
-    fmap = folium.Map(location=[center_lat, center_lon], zoom_start=6, tiles="cartodbpositron")
+    fmap = folium.Map(tiles="cartodbpositron")
+    fmap.fit_bounds(THAILAND_BOUNDS)
     cluster = MarkerCluster(name="OpenAQ Stations").add_to(fmap)
 
     for (station, city, lat, lon), readings in df.groupby(

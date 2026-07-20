@@ -32,6 +32,3 @@ GISTDA GeoAI & Vibe Coding - Material-20260713T064051Z-2-001/
 *.tif.ovr
 *.tif.aux.xml
 *.tfw
-
-# Generated map output
-openaq_thailand_map.html
